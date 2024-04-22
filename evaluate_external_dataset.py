@@ -61,10 +61,11 @@ def main():
     all_results_sd = pd.DataFrame([], index=args_datasets)
     for args.dataset in args_datasets:
         # Configuration
-        data_dir = Path("/root/TabLLM/datasets")
+        data_dir = Path("./datasets")
         data_dir = data_dir / args.dataset
 
-        models = ['lr']
+        # models = ['lr']
+        models = ['gpt3']
         assert(len(models)) == 1  # For current output only one model is supported
         # models = ['output_datasets']
         ts = datetime.datetime.now().strftime("-%Y%m%d-%H%M%S")
@@ -93,7 +94,7 @@ def main():
                 dataset = DatasetDict({k: Dataset.from_pandas(v, preserve_index=False) for k, v in dataset.items()})
                 dataset = concatenate_datasets(list(dataset.values()))
                 # 2. Apply method from tfew loading, but skip the data loading from disk (mainly caps validation set)
-                if model == 'gpt3':
+                if model == 'gpt3': #t
                     dataset = add_gpt3_zero_shot_predictions(dataset, args.dataset, data_dir)
                 dataset = DatasetDict({k: read_orig_dataset(dataset, seed, k) for k in ['train', 'validation', 'test']})
 
